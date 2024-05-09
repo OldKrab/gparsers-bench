@@ -112,36 +112,32 @@ THE POSSIBILITY OF SUCH DAMAGE.
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-kernel</artifactId>
-            <version>4.4.33</version>
+            <version>3.4.12</version>
         </dependency>
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-io</artifactId>
-            <version>4.4.33</version>
+            <version>3.4.12</version>
         </dependency>
         <!-- For test scope dependencies -->
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-kernel</artifactId>
-            <version>4.4.33</version>
+            <version>3.4.12</version>
             <classifier>tests</classifier>
         </dependency>
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-io</artifactId>
-            <version>4.4.33</version>
+            <version>3.4.12</version>
             <classifier>tests</classifier>
         </dependency>
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j</artifactId>
-            <version>4.4.33</version>
+            <version>3.4.12</version>
         </dependency>
-        <dependency>
-            <groupId>org.neo4j.test</groupId>
-            <artifactId>neo4j-harness</artifactId>
-            <version>4.4.33</version>
-        </dependency>
+
 
         <dependency>
             <groupId>org.parser</groupId>

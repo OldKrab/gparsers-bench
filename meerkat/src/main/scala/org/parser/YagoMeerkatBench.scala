@@ -3,7 +3,6 @@ package org.parser
 import org.meerkat.graph.neo4j.Neo4jInput
 import org.meerkat.input.Input
 import org.meerkat.parsers.executeQuery
-import org.neo4j.dbms.api.DatabaseManagementService
 import org.neo4j.graphdb.GraphDatabaseService
 import org.openjdk.jmh.annotations._
 
@@ -22,7 +21,7 @@ class YagoMeerkatBench {
   var dbName = ""
 
   var graph: Input[String, String] = _
-   var neo4j: DatabaseManagementService = _
+   var neo4j:  GraphDatabaseService = _
 
   @Setup
   def setup(): Unit = {
@@ -30,8 +29,9 @@ class YagoMeerkatBench {
     if(dbConfigPath == "") throw new RuntimeException("No dbConfigPath")
     if(dbName == "") throw new RuntimeException("No dbName")
     neo4j = Neo4jUtils.openNeo4jDb(Path.of(dbPath), Path.of(dbConfigPath))
-    val db = neo4j.database(dbName)
-    graph = new Neo4jInput(db)
+    neo4j.beginTx()
+    println(s"loaded gr with ${neo4j.getAllNodes.stream().count()} nodes")
+    graph = new Neo4jInput(neo4j)
   }
 
   @TearDown

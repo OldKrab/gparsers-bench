@@ -8,7 +8,7 @@ import org.meerkat.graph.parseGraphFromAllPositions
 import org.meerkat.input.{GraphxInput, Input}
 import org.meerkat.parsers.{AbstractCPSParsers, Parsers}
 import org.meerkat.parsers.Parsers.{Symbol, V, inE, outE, ε}
-import org.neo4j.harness.Neo4jBuilders
+import org.neo4j.test.TestGraphDatabaseFactory
 
 import scala.collection.JavaConverters.asScalaBufferConverter
 
@@ -23,15 +23,14 @@ object Meerkat {
 
   def edgesToNeo4jGraph(edges: java.util.List[Edge],
                         nodesCount: Integer): Neo4jInput = {
-    val db2 = Neo4jBuilders.newInProcessBuilder().build().defaultDatabaseService()
-    val db = db2.beginTx()
+    val db = new TestGraphDatabaseFactory().newImpermanentDatabase
+    db.beginTx()
     val nodes = List.fill(nodesCount)(db.createNode)
     edges.asScala.foreach { e =>
         val r = nodes(e.from).createRelationshipTo(nodes(e.to), () => e.label)
       r.setProperty("id", "42")
     }
-    db.commit()
-    new Neo4jInput(db2)
+    new Neo4jInput(db)
   }
 
 

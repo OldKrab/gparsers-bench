@@ -1,7 +1,8 @@
 package org.parser
 
 import org.apache.jena.rdf.model.ModelFactory
-import org.neo4j.dbms.api.{DatabaseManagementService, DatabaseManagementServiceBuilder}
+import org.neo4j.graphdb.GraphDatabaseService
+import org.neo4j.graphdb.factory.{GraphDatabaseBuilder, GraphDatabaseFactory}
 
 import java.net.URI
 import java.nio.file.Path
@@ -55,10 +56,9 @@ object Neo4jUtils {
     graph
   }
 
-  def openNeo4jDb(dbPath: Path, configPath: Path):
-  DatabaseManagementService = {
-    return new DatabaseManagementServiceBuilder(dbPath)
-      .loadPropertiesFromFile(configPath).build()
+  def openNeo4jDb(dbPath: Path, configPath: Path): GraphDatabaseService
+  = {
+    new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(dbPath.toFile).loadPropertiesFromFile(configPath.toString).newGraphDatabase();
   }
 
 }

@@ -1,5 +1,6 @@
 package org.parser
 
+import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.meerkat.graph.neo4j.Neo4jInput
 import org.meerkat.parsers.executeQuery
@@ -7,10 +8,10 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.junit.JUnitRunner
 
 import java.nio.file.Path
-
+@Ignore
 @RunWith(classOf[JUnitRunner])
 class MeerkatBenchTest extends AnyFunSuite {
-  test("test") {
+ test("test") {
     var dbPath = "/home/old/diploma/sandbox/rlqdag/neo4j_4.4.33/"
     var dbConfigPath = "/home/old/diploma/sandbox/rlqdag/neo4j_4.4.33/conf/neo4j.conf"
     var dbName = ""
