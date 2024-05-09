@@ -12,5 +12,5 @@ JMH_FLAGS="-bm avgt
 -p dbName=$DB_NAME
 "
 
-/usr/lib/jvm/java-11-openjdk/bin/java $DISABLE_NEO4J_WARNING_FLAGS -jar \
+"$JAVA_HOME"/bin/java $DISABLE_NEO4J_WARNING_FLAGS -jar \
   "$MODULE"/target/benchmarks.jar $JMH_FLAGS Yago
