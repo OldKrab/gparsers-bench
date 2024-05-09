@@ -1,8 +1,10 @@
 package org.parser
 
 import org.apache.jena.rdf.model.ModelFactory
+import org.neo4j.dbms.api.{DatabaseManagementService, DatabaseManagementServiceBuilder}
 
 import java.net.URI
+import java.nio.file.Path
 import scala.collection.JavaConverters.{asScalaIteratorConverter, seqAsJavaListConverter}
 
 class Edge(val from: Int, val label: String, val to: Int)
@@ -51,6 +53,12 @@ object Neo4jUtils {
     val (edges, nodesCount) = triplesToEdges(triples)
     val graph = edgesToGraph(edges.asJava, nodesCount)
     graph
+  }
+
+  def openNeo4jDb(dbPath: Path, configPath: Path):
+  DatabaseManagementService = {
+    return new DatabaseManagementServiceBuilder(dbPath)
+      .loadPropertiesFromFile(configPath).build()
   }
 
 }

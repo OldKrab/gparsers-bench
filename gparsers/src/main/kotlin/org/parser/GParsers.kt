@@ -103,9 +103,7 @@ object GparsersBench {
         //MATCH (x)-[:P74636308]->()-[:P59561600]->()-[:P13305537*1..]->()-[:P92580544*1..]->(:Entity{id:'40324616'})
         // RETURN DISTINCT x
 
-        return (v {
-            it.properties["id"] == "40324616"
-        } seq
+        return (v { it.properties["id"] == "40324616" } seq
                 (inE { it.label == "P92580544" } seq inV()).some seq
                 (inE { it.label == "P13305537" } seq inV()).some seq
                 inE { it.label == "P59561600" } seq inV() seq

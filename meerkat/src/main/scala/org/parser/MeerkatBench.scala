@@ -1,6 +1,7 @@
 package org.parser
 
 import org.meerkat.input.Input
+import org.meerkat.parsers.executeQuery
 import org.openjdk.jmh.annotations.{Benchmark, Param, Scope, Setup, State}
 import org.parser.Neo4jUtils
 
@@ -37,5 +38,11 @@ class MeerkatBench {
   @Benchmark
   def secondGrammar(): Unit = {
     Meerkat.parse(graph, Meerkat.grammar.G2)
+  }
+
+  @Benchmark
+  def yagoGrammar(): Unit = {
+    val cnt = executeQuery(Meerkat.grammar.yagoG, graph).size
+    print(cnt)
   }
 }
