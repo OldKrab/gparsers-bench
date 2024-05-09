@@ -18,6 +18,12 @@ class MeerkatBenchTest extends AnyFunSuite {
     println(neo4j.beginTx().getAllNodes.stream().count())
 
     val graph = new Neo4jInput(neo4j)
+    val cnt = executeQuery(Meerkat.grammar.yagoG, graph).size
+    println(cnt)
+  }
+  test("test2") {
+    val file =  "atom-primitive.owl"
+    val graph = Neo4jUtils.getGraph(file, Meerkat.edgesToNeo4jGraph)
     val cnt = executeQuery(Meerkat.grammar.test, graph).size
     println(cnt)
   }

@@ -5,8 +5,6 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/gparser/pom.xml" />
-        <option value="$PROJECT_DIR$/gpar/pom.xml" />
       </list>
     </option>
   </component>

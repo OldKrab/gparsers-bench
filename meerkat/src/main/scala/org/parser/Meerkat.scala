@@ -7,7 +7,7 @@ import org.meerkat.graph.neo4j.Neo4jInput.Entity
 import org.meerkat.graph.parseGraphFromAllPositions
 import org.meerkat.input.{GraphxInput, Input}
 import org.meerkat.parsers.{AbstractCPSParsers, Parsers}
-import org.meerkat.parsers.Parsers.{Symbol, V, inE, ε}
+import org.meerkat.parsers.Parsers.{Symbol, V, inE, outE, ε}
 import org.neo4j.harness.Neo4jBuilders
 
 import scala.collection.JavaConverters.asScalaBufferConverter
@@ -23,12 +23,15 @@ object Meerkat {
 
   def edgesToNeo4jGraph(edges: java.util.List[Edge],
                         nodesCount: Integer): Neo4jInput = {
-    val db = Neo4jBuilders.newInProcessBuilder().build().defaultDatabaseService()
-    val nodes = List.fill(nodesCount)(db.beginTx().createNode)
+    val db2 = Neo4jBuilders.newInProcessBuilder().build().defaultDatabaseService()
+    val db = db2.beginTx()
+    val nodes = List.fill(nodesCount)(db.createNode)
     edges.asScala.foreach { e =>
-        nodes(e.from).createRelationshipTo(nodes(e.to), () => e.label)
+        val r = nodes(e.from).createRelationshipTo(nodes(e.to), () => e.label)
+      r.setProperty("id", "42")
     }
-    new Neo4jInput(db)
+    db.commit()
+    new Neo4jInput(db2)
   }
 
 
@@ -69,7 +72,8 @@ object Meerkat {
       inE((e: Entity) => e.label() ==  "P13305537").+ ~
       inE((e: Entity) => e.label() ==  "P59561600") ~
       inE((e: Entity) => e.label() ==  "P74636308"))
-    val test =  syn(V((e: Entity) => e.getProperty("id") == "40324616"))
+    val test =  syn(V((e: Entity) => true) ~
+      inE((e: Entity) => e.getProperty("id") == "40324616"))
   }
 
 

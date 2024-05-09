@@ -41,7 +41,7 @@ class YagoMeerkatBench {
 
   @Benchmark
   def yagoGrammar(): Unit = {
-    val cnt = executeQuery(Meerkat.grammar.test, graph).size
+    val cnt = executeQuery(Meerkat.grammar.yagoG, graph).size
     println(cnt)
   }
 }
