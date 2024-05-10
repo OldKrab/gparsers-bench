@@ -31,8 +31,8 @@ open class GParsersBench {
 
     @Setup
     fun setup(): Unit {
-        neo4j = GparsersBench.openInProcessNeo4jDb()
-        graph = GparsersBench.getGraph(file, neo4j.defaultDatabaseService(), GparsersBench::edgesToNeo4jGraph)
+        neo4j = GParsers.openInProcessNeo4jDb()
+        graph = GParsers.getGraph(file, neo4j.defaultDatabaseService(), GParsers::edgesToNeo4jGraph)
     }
 
     @TearDown
@@ -42,13 +42,13 @@ open class GParsersBench {
 
     @Benchmark
     fun firstQuery() {
-        val cnt = GparsersBench.parse(graph, GparsersBench.firstGrammar())
+        val cnt = GParsers.parse(graph, GParsers.firstGrammar())
     }
 
 
     @Benchmark
     fun secondQuery() {
-        val cnt = GparsersBench.parse(graph, GparsersBench.secondGrammar())
+        val cnt = GParsers.parse(graph, GParsers.secondGrammar())
     }
 }
 

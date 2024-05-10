@@ -15,8 +15,8 @@ class MeerkatBenchTest extends AnyFunSuite {
     var dbPath = "/home/old/diploma/sandbox/rlqdag/neo4j_4.4.33/"
     var dbConfigPath = "/home/old/diploma/sandbox/rlqdag/neo4j_4.4.33/conf/neo4j.conf"
     var dbName = ""
-    val neo4j = Neo4jUtils.openNeo4jDb(Path.of(dbPath), Path.of(dbConfigPath)).database("yago-neo4j")
-    println(neo4j.beginTx().getAllNodes.stream().count())
+    val neo4j = Neo4jUtils.openNeo4jDb(Path.of(dbPath), Path.of(dbConfigPath))
+    println(neo4j.getAllNodes.stream().count())
 
     val graph = new Neo4jInput(neo4j)
     val cnt = executeQuery(Meerkat.grammar.yagoG, graph).size
@@ -26,6 +26,13 @@ class MeerkatBenchTest extends AnyFunSuite {
     val file =  "atom-primitive.owl"
     val graph = Neo4jUtils.getGraph(file, Meerkat.edgesToNeo4jGraph)
     val cnt = executeQuery(Meerkat.grammar.test, graph).size
+    println(cnt)
+  }
+
+  test("testCFPQ") {
+    val file =  "eclass.csv"
+    val graph = CFPQCsvGraph.getGraph(file)
+    val cnt =  Meerkat.parse(graph, CFPQCsvGraph.grammar)
     println(cnt)
   }
 

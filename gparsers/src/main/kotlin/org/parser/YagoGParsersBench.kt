@@ -1,7 +1,6 @@
 package org.parser
 
 import org.neo4j.dbms.api.DatabaseManagementService
-import org.neo4j.harness.Neo4j
 import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.Param
 import org.openjdk.jmh.annotations.Scope
@@ -32,7 +31,7 @@ open class YagoGParsersBench {
         if(dbConfigPath == "") throw RuntimeException("No dbConfigPath")
         if(dbName == "") throw RuntimeException("No dbName")
 
-        neo4j = GparsersBench.openNeo4jDb(Path.of(dbPath), Path.of(dbConfigPath))
+        neo4j = GParsers.openNeo4jDb(Path.of(dbPath), Path.of(dbConfigPath))
         graph = DefaultNeo4jGraph(neo4j.database(dbName))
     }
 
@@ -43,7 +42,7 @@ open class YagoGParsersBench {
 
     @Benchmark
     fun firstQuery() {
-        val cnt = GparsersBench.yagoReversedGrammar().parseState(StartState(graph)).size
+        val cnt = GParsers.yagoReversedGrammar().parseState(StartState(graph)).size
         println(cnt)
     }
 

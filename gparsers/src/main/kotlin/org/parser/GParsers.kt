@@ -14,13 +14,12 @@ import org.parser.neo4j.DefaultNeo4jCombinators.inE
 import org.parser.neo4j.DefaultNeo4jCombinators.inV
 import org.parser.neo4j.DefaultNeo4jCombinators.outV
 import org.parser.neo4j.DefaultNeo4jCombinators.v
+import org.parser.shared.Edge
 import java.net.URI
 import java.nio.file.Path
 import java.util.*
 
-data class Edge(val from: Int, val label: String, val to: Int)
-
-object GparsersBench {
+object GParsers {
     fun openNeo4jDb(neo4jHome: Path, neo4jConfig: Path): DatabaseManagementService {
         return DatabaseManagementServiceBuilder(neo4jHome)
             .loadPropertiesFromFile(neo4jConfig).build()
@@ -33,7 +32,7 @@ object GparsersBench {
         return neo4j
     }
 
-    fun edgesToNeo4jGraph(db: GraphDatabaseService, edges: List<Edge>, nodesCount: Int): DefaultNeo4jGraph {
+    fun edgesToNeo4jGraph(db: GraphDatabaseService, edges: Iterable<Edge>, nodesCount: Int): DefaultNeo4jGraph {
         val tx = db.beginTx()
         val nodes = List(nodesCount) { tx.createNode() }
         edges.forEach { e ->
@@ -43,19 +42,23 @@ object GparsersBench {
         return DefaultNeo4jGraph(db)
     }
 
-    fun parse(
+    fun <T> parse(
         graph: DefaultNeo4jGraph,
-        grammar: Parser<DefaultVertexState, DefaultVertexState, Unit>
+        grammar: Parser<DefaultVertexState, DefaultVertexState, T>
     ): Int {
         val nodes = graph.getVertexes()
         var size = 0
         var cnt = 0
         for (node in nodes) {
-            val cur = grammar.parseState(VertexState(graph, node)).size
+            val nodes = grammar.parseState(VertexState(graph, node))
+            val cur = nodes.size
             size += cur
             cnt += 1
-            if (cnt % 100000 == 0)
-                println("Parsed $cnt nodes")
+//            if(cur != 0){
+//                println("$cnt -> $cur")
+//            }
+//            if (cnt % 100000 == 0)
+//                println("Parsed $cnt nodes")
         }
         return size
     }

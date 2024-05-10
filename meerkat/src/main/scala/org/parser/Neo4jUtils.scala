@@ -3,12 +3,12 @@ package org.parser
 import org.apache.jena.rdf.model.ModelFactory
 import org.neo4j.graphdb.GraphDatabaseService
 import org.neo4j.graphdb.factory.{GraphDatabaseBuilder, GraphDatabaseFactory}
+import org.parser.shared.Edge
 
 import java.net.URI
 import java.nio.file.Path
 import scala.collection.JavaConverters.{asScalaIteratorConverter, seqAsJavaListConverter}
 
-class Edge(val from: Int, val label: String, val to: Int)
 
 object Neo4jUtils {
   def getTriples(file: String): List[(String, String, String)] = {
@@ -49,10 +49,10 @@ object Neo4jUtils {
   }
 
 
-  def getGraph[T](file: String, edgesToGraph: (java.util.List[Edge], Integer) => T): T = {
+  def getGraph[T](file: String, edgesToGraph: (List[Edge], Integer) => T): T = {
     val triples = getTriples(file)
     val (edges, nodesCount) = triplesToEdges(triples)
-    val graph = edgesToGraph(edges.asJava, nodesCount)
+    val graph = edgesToGraph(edges, nodesCount)
     graph
   }
 
