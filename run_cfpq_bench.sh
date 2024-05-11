@@ -8,10 +8,10 @@ DISABLE_NEO4J_WARNING_FLAGS="--add-opens java.base/java.lang=ALL-UNNAMED --add-o
 JMH_FLAGS='-bm avgt
 -f 2
 -tu s
--p file=eclass.csv,enzyme.csv'
+-p file=go_hierarchy.csv,go.csv,geospecies.csv'
+
+"$JAVA_HOME"/bin/java $DISABLE_NEO4J_WARNING_FLAGS  -jar \
+  gparsers/target/benchmarks.jar -o gparsers.res2 $JMH_FLAGS CFPQ
 
 "$JAVA_HOME"/bin/java $DISABLE_NEO4J_WARNING_FLAGS -jar \
-  gparsers/target/benchmarks.jar -o gparsers.res $JMH_FLAGS CFPQ
-
-"$JAVA_HOME"/bin/java $DISABLE_NEO4J_WARNING_FLAGS -jar \
-  meerkat/target/benchmarks.jar -o meerkat.res $JMH_FLAGS CFPQ
+  meerkat/target/benchmarks.jar -o meerkat.res2 $JMH_FLAGS CFPQ
