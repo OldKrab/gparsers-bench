@@ -1,6 +1,7 @@
 package org.parser
 
-import org.neo4j.harness.Neo4j
+import org.neo4j.configuration.GraphDatabaseSettings.DEFAULT_DATABASE_NAME
+import org.neo4j.dbms.api.DatabaseManagementService
 import org.openjdk.jmh.annotations.Benchmark
 import org.openjdk.jmh.annotations.Param
 import org.openjdk.jmh.annotations.Scope
@@ -27,17 +28,17 @@ open class GParsersBench {
     var file = ""
 
     lateinit var graph: DefaultNeo4jGraph
-    lateinit var neo4j: Neo4j
+    lateinit var neo4j: DatabaseManagementService
 
     @Setup
     fun setup(): Unit {
-        neo4j = GParsers.openInProcessNeo4jDb()
-        graph = GParsers.getGraph(file, neo4j.defaultDatabaseService(), GParsers::edgesToNeo4jGraph)
+        neo4j = GParsers.createNeo4jDb(file)
+        graph = GParsers.getGraph(file, neo4j.database(DEFAULT_DATABASE_NAME), GParsers::edgesToNeo4jGraph)
     }
 
     @TearDown
     fun tearDown() {
-        neo4j.close()
+        neo4j.shutdown()
     }
 
     @Benchmark

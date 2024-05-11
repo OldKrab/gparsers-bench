@@ -49,10 +49,10 @@ object Neo4jUtils {
   }
 
 
-  def getGraph[T](file: String, edgesToGraph: (List[Edge], Integer) => T): T = {
+  def getGraph[T](file: String, edgesToGraph: (String, List[Edge], Integer) => T): T = {
     val triples = getTriples(file)
     val (edges, nodesCount) = triplesToEdges(triples)
-    val graph = edgesToGraph(edges, nodesCount)
+    val graph = edgesToGraph(file, edges, nodesCount)
     graph
   }
 

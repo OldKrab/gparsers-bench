@@ -30,8 +30,13 @@ class MeerkatBenchTest extends AnyFunSuite {
   }
 
   test("testCFPQ") {
-    val file =  "eclass.csv"
+    val file =  "enzyme.csv"
     val graph = CFPQCsvGraph.getGraph(file)
+
+//    val neo4j = Neo4jUtils.openNeo4jDb(
+//      Path.of("/home/old/diploma/sources/benchmark/gparsers/temp_db/c647d581752f13da1532478669abe42f/data/databases/neo4j/"), Path.of(""))
+//    val graph = new Neo4jInput(neo4j)
+
     val cnt =  Meerkat.parse(graph, CFPQCsvGraph.grammar)
     println(cnt)
   }

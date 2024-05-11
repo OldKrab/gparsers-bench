@@ -2,6 +2,7 @@ package org.parser
 
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.neo4j.configuration.GraphDatabaseSettings.DEFAULT_DATABASE_NAME
 import org.parser.combinators.graph.StartState
 import org.parser.neo4j.DefaultNeo4jGraph
 import java.nio.file.Path
@@ -10,8 +11,9 @@ class GParsersTest {
     @Test
     @Disabled
     fun test(){
-        val db = GParsers.openInProcessNeo4jDb().defaultDatabaseService()
-        val graph = GParsers.getGraph("atom-primitive.owl", db, GParsers::edgesToNeo4jGraph)
+        val file = "atom-primitive.owl"
+        val db = GParsers.createNeo4jDb(file).database(DEFAULT_DATABASE_NAME)
+        val graph = GParsers.getGraph(file, db, GParsers::edgesToNeo4jGraph)
         val cnt = GParsers.parse(graph, GParsers.firstGrammar())
         println(cnt)
     }
@@ -32,12 +34,12 @@ class GParsersTest {
     @Test
     @Disabled
     fun cfpq(){
-        val neo4j = GParsers.openInProcessNeo4jDb()
-        val db = neo4j.defaultDatabaseService()
-        val graph = CFPQCsvGraph.getGraph("eclass.csv", db)
+        val file = "enzyme.csv"
+        val neo4j = GParsers.createNeo4jDb(file)
+        val db = neo4j.database(DEFAULT_DATABASE_NAME)
+        val graph = CFPQCsvGraph.getGraph(file, db)
         val cnt = GParsers.parse(graph, CFPQCsvGraph.firstGrammar())
         println(cnt)
-        neo4j.close()
-
+        neo4j.shutdown()
     }
 }

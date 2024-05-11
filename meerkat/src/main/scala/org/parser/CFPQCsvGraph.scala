@@ -32,7 +32,7 @@ object CFPQCsvGraph {
   def getGraph(file: String): Neo4jInput = {
     val edges = CsvLoaderKt.loadCsvEdges(getFileStream(file)).toList
     val nodesCount = edges.flatMap { case it => List(it.getFrom, it.getTo) }.toSet.size
-    Meerkat.edgesToNeo4jGraph(edges, nodesCount)
+    Meerkat.edgesToNeo4jGraph(file, edges, nodesCount)
   }
 
 

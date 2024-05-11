@@ -1,11 +1,10 @@
 package org.parser
 
 import org.apache.jena.rdf.model.ModelFactory
+import org.neo4j.configuration.GraphDatabaseSettings
 import org.neo4j.dbms.api.DatabaseManagementService
 import org.neo4j.dbms.api.DatabaseManagementServiceBuilder
 import org.neo4j.graphdb.GraphDatabaseService
-import org.neo4j.harness.Neo4j
-import org.neo4j.harness.Neo4jBuilders
 import org.parser.combinators.*
 import org.parser.combinators.graph.VertexState
 import org.parser.neo4j.*
@@ -26,14 +25,19 @@ object GParsers {
     }
 
 
-    fun openInProcessNeo4jDb(): Neo4j {
-        val neo4j = Neo4jBuilders.newInProcessBuilder().build()
-        val db = neo4j.defaultDatabaseService()
-        return neo4j
+    fun createNeo4jDb(file: String): DatabaseManagementService {
+        val dbPath = Path.of("temp_dbs/gparsers/$file")
+        val managementService = DatabaseManagementServiceBuilder(dbPath).setConfig(GraphDatabaseSettings.preallocate_logical_logs, false).build();
+        return managementService
     }
 
-    fun edgesToNeo4jGraph(db: GraphDatabaseService, edges: Iterable<Edge>, nodesCount: Int): DefaultNeo4jGraph {
+    fun edgesToNeo4jGraph(db: GraphDatabaseService, edges: List<Edge>, nodesCount: Int): DefaultNeo4jGraph {
         val tx = db.beginTx()
+        if (tx.allRelationships.count() == edges.size) {
+            println("db already filled")
+            return DefaultNeo4jGraph(db)
+        }
+        println("creating db")
         val nodes = List(nodesCount) { tx.createNode() }
         edges.forEach { e ->
             nodes[e.from].createRelationshipTo(nodes[e.to]) { e.label }
