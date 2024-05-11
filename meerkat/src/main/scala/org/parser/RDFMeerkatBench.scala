@@ -7,7 +7,7 @@ import org.parser.Neo4jUtils
 
 
 @State(Scope.Benchmark)
-class MeerkatBench {
+class RDFMeerkatBench {
   @Param(Array(
     "atom-primitive.owl",
     "biomedical-mesure-primitive.owl",

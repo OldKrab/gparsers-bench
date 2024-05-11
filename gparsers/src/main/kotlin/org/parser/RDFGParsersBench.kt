@@ -11,7 +11,7 @@ import org.openjdk.jmh.annotations.TearDown
 import org.parser.neo4j.DefaultNeo4jGraph
 
 @State(Scope.Benchmark)
-open class GParsersBench {
+open class RDFGParsersBench {
     @Param(
         "atom-primitive.owl",
         "biomedical-mesure-primitive.owl",
