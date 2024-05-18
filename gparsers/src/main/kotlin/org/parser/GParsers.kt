@@ -27,7 +27,7 @@ object GParsers {
 
     fun createNeo4jDb(file: String): DatabaseManagementService {
         val dbPath = Path.of("temp_dbs/gparsers/$file")
-        val managementService = DatabaseManagementServiceBuilder(dbPath).setConfig(GraphDatabaseSettings.preallocate_logical_logs, false).build();
+        val managementService = DatabaseManagementServiceBuilder(dbPath).build();
         return managementService
     }
 
@@ -48,7 +48,7 @@ object GParsers {
 
     fun <T> parse(
         graph: DefaultNeo4jGraph,
-        grammar: Parser<DefaultVertexState, DefaultVertexState, T>
+        grammar: BaseParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, T>
     ): Int {
         val nodes = graph.getVertexes()
         var size = 0
@@ -68,24 +68,24 @@ object GParsers {
     }
 
 
-    fun firstGrammar(): Parser<DefaultVertexState, DefaultVertexState, Unit> {
+    fun firstGrammar(): BaseParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Any> {
         val subclassof1 = outE { it.label == "subclassof-1" }
         val subclassof = outE { it.label == "subclassof" }
         val type1 = outE { it.label == "type-1" }
         val type = outE { it.label == "type" }
-        val p = fix { S: Parser<DefaultVertexState, DefaultVertexState, Unit> ->
-            rule(
-                (subclassof1 seq outV() seq (S or eps()) seq subclassof seq outV()) using { _ -> Unit },
-                (type1 seq outV() seq (S or eps()) seq type seq outV()) using { _ -> Unit },
+        val S = LazyParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Any>()
+        S.p = rule(
+                (subclassof1 seq outV() seq (S or eps()) seq subclassof seq outV()),
+                (type1 seq outV() seq (S or eps()) seq type seq outV()),
             )
-        }
-        return p
+
+        return S
     }
 
-    fun secondGrammar(): Parser<DefaultVertexState, DefaultVertexState, Unit> {
+    fun secondGrammar(): BaseParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Unit> {
         val subclassof1 = outE { it.label == "subclassof-1" }
         val subclassof = outE { it.label == "subclassof" }
-        val B = fix { B: Parser<DefaultVertexState, DefaultVertexState, Unit> ->
+        val B = fix { B: BaseParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Unit> ->
             rule(
                 (subclassof1 seq outV() seq B seq subclassof seq outV()) using { _ -> Unit },
                 (subclassof1 seq outV() seq subclassof seq outV()) using { _ -> Unit },
@@ -94,7 +94,7 @@ object GParsers {
         return ((B or eps()) seq subclassof seq outV()) using { _ -> Unit }
     }
 
-    fun yagoGrammar(): Parser<DefaultVertexState, DefaultVertexState, Unit> {
+    fun yagoGrammar(): BaseParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Unit> {
         //MATCH (x)-[:P74636308]->()-[:P59561600]->()-[:P13305537*1..]->()-[:P92580544*1..]->(:Entity{id:'40324616'})
         // RETURN DISTINCT x
 
@@ -106,7 +106,7 @@ object GParsers {
                 ) using { _ -> Unit }
     }
 
-    fun yagoReversedGrammar(): Parser<DefaultStartState, DefaultVertexState, Unit> {
+    fun yagoReversedGrammar(): BaseParser<DefaultNeo4jStartState, DefaultNeo4jVertexState, Unit> {
         //MATCH (x)-[:P74636308]->()-[:P59561600]->()-[:P13305537*1..]->()-[:P92580544*1..]->(:Entity{id:'40324616'})
         // RETURN DISTINCT x
 

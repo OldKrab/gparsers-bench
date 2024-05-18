@@ -19,25 +19,26 @@ class MeerkatBenchTest extends AnyFunSuite {
     println(neo4j.getAllNodes.stream().count())
 
     val graph = new Neo4jInput(neo4j)
-    val cnt = executeQuery(Meerkat.grammar.yagoG, graph).size
+    val cnt = executeQuery(Meerkat.getYagoGrammar(), graph).size
     println(cnt)
   }
   test("test2") {
     val file =  "atom-primitive.owl"
     val graph = Neo4jUtils.getGraph(file, Meerkat.edgesToNeo4jGraph)
-    val cnt = executeQuery(Meerkat.grammar.test, graph).size
+    val cnt = Meerkat.parse(graph, Meerkat.getGrammar1())
     println(cnt)
   }
 
   test("testCFPQ") {
-    val file =  "enzyme.csv"
+    val file =  "go.csv"
     val graph = CFPQCsvGraph.getGraph(file)
 
 //    val neo4j = Neo4jUtils.openNeo4jDb(
 //      Path.of("/home/old/diploma/sources/benchmark/gparsers/temp_db/c647d581752f13da1532478669abe42f/data/databases/neo4j/"), Path.of(""))
 //    val graph = new Neo4jInput(neo4j)
+    val g = CFPQCsvGraph.grammar
 
-    val cnt =  Meerkat.parse(graph, CFPQCsvGraph.grammar)
+    val cnt =  Meerkat.parse(graph, g)
     println(cnt)
   }
 

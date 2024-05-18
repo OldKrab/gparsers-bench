@@ -34,12 +34,14 @@ class GParsersTest {
     @Test
     @Disabled
     fun cfpq(){
-        val file = "enzyme.csv"
+        val file = "go.csv"
         val neo4j = GParsers.createNeo4jDb(file)
         val db = neo4j.database(DEFAULT_DATABASE_NAME)
         val graph = CFPQCsvGraph.getGraph(file, db)
-        val cnt = GParsers.parse(graph, CFPQCsvGraph.firstGrammar())
+        val grammar = CFPQCsvGraph.firstGrammar()
+        val cnt = GParsers.parse(graph, grammar)
         println(cnt)
+        Thread.sleep(10000)
         neo4j.shutdown()
     }
 }

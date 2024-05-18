@@ -58,39 +58,42 @@ object Meerkat {
   //    val graph = edgesToNeo4jGraph(edges, nodesCount)
   //    graph
   //  }
+  private def sameGen(bs: List[(Symbol[L, N, _], Symbol[L, N, _])]): Symbol[L, N, _] =
+    bs.map { case (ls, rs) => ls ~ syn(sameGen(bs) | ε) ~ rs } match {
+      case x :: Nil => syn(ε | x)
+      case x :: y :: xs => syn(xs.foldLeft(x | y)(_ | _))
+    }
 
   def getGrammar1(): AbstractCPSParsers.AbstractSymbol[L, N, _, _] = {
-    grammar.G1
+    syn(sameGen(List(("subclassof-1", "subclassof"), ("type-1", "type"))))
   }
 
-  val grammar = new AnyRef {
-    private def sameGen(
-                         bs: List[(Symbol[L, N, _], Symbol[L, N, _])]): Symbol[L, N, _] =
-      bs.map { case (ls, rs) => ls ~ syn(sameGen(bs) | ε) ~ rs } match {
-        case x :: Nil => syn(ε | x)
-        case x :: y :: xs => syn(xs.foldLeft(x | y)(_ | _))
-      }
+  def getGrammar2(): AbstractCPSParsers.AbstractSymbol[L, N, _, _] = {
+    syn(sameGen(List(("subclassof-1", "subclassof"))) ~ "subclassof")
+  }
 
-    val G1 =
-      syn(sameGen(List(("subclassof-1", "subclassof"), ("type-1", "type"))))
-
-    val G2 =
-      syn(sameGen(List(("subclassof-1", "subclassof"))) ~ "subclassof")
-
-    //    (v { it.properties["id"] == "40324616" } seq
-    //      (inE { it.label == "P92580544" } seq inV()).some seq
-    //      (inE { it.label == "P13305537" } seq inV()).some seq
-    //      inE { it.label == "P59561600" } seq inV() seq
-    //      inE { it.label == "P74636308" } seq inV()
-    //      ) using { _ -> Unit }
-    //
-    val yagoG = syn((V((e: Entity) => e.getProperty("id") == "40324616") ~
+  def getYagoGrammar() = {
+    syn((V((e: Entity) => e.getProperty("id") == "40324616") ~
       (inE((e: Entity) => e.label() == "P92580544")).+ ~
       inE((e: Entity) => e.label() == "P13305537").+ ~
       inE((e: Entity) => e.label() == "P59561600") ~
       inE((e: Entity) => e.label() == "P74636308")) &&)
-    val test = syn(V((e: Entity) => e.id == 1930288))
   }
+
+
+  //  val grammar = new AnyRef {
+  //
+
+  //    //    (v { it.properties["id"] == "40324616" } seq
+  //    //      (inE { it.label == "P92580544" } seq inV()).some seq
+  //    //      (inE { it.label == "P13305537" } seq inV()).some seq
+  //    //      inE { it.label == "P59561600" } seq inV() seq
+  //    //      inE { it.label == "P74636308" } seq inV()
+  //    //      ) using { _ -> Unit }
+  //    //
+     // val yagoG =
+  //    val test = syn(V((e: Entity) => e.id == 1930288))
+  //  }
 
 
 }

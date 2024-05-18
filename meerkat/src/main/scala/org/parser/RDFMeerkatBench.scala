@@ -32,17 +32,17 @@ class RDFMeerkatBench {
 
   @Benchmark
   def firstGrammar(): Unit = {
-    Meerkat.parse(graph, Meerkat.grammar.G1)
+    Meerkat.parse(graph, Meerkat.getGrammar1())
   }
 
   @Benchmark
   def secondGrammar(): Unit = {
-    Meerkat.parse(graph, Meerkat.grammar.G2)
+    Meerkat.parse(graph, Meerkat.getGrammar2())
   }
 
   @Benchmark
   def yagoGrammar(): Unit = {
-    val cnt = executeQuery(Meerkat.grammar.yagoG, graph).size
+    val cnt = executeQuery(Meerkat.getYagoGrammar(), graph).size
     print(cnt)
   }
 }
