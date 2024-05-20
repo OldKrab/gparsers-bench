@@ -69,24 +69,10 @@ object GParsers {
         return size
     }
 
-
     fun firstGrammar(): BaseParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Any> {
-        val subclassof1 = outE { it.label == "subclassof-1" }
-        val subclassof = outE { it.label == "subclassof" }
-        val type1 = outE { it.label == "type-1" }
-        val type = outE { it.label == "type" }
-        val S = LazyParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Any>()
-        S.p = rule(
-                (subclassof1 seq outV() seq (S or eps()) seq subclassof seq outV()),
-                (type1 seq outV() seq (S or eps()) seq type seq outV()),
-            )
-
-        return S
-    }
-    fun firstGrammar2(): BaseParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Any> {
-        val subclassof1 = throughInE { it.label == "subClassOf" }
-        val subclassof = throughOutE { it.label == "subClassOf" }
-        val type1 = throughInE { it.label == "type" }
+        val subclassof1 = throughOutE { it.label == "subclassof-1" }
+        val subclassof = throughOutE { it.label == "subclassof" }
+        val type1 = throughOutE { it.label == "type-1" }
         val type = throughOutE { it.label == "type" }
         val S = LazyParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Any>()
         S.p =
@@ -96,16 +82,14 @@ object GParsers {
         return S
     }
 
-    fun secondGrammar(): BaseParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Unit> {
-        val subclassof1 = outE { it.label == "subclassof-1" }
-        val subclassof = outE { it.label == "subclassof" }
-        val B = fix { B: BaseParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Unit> ->
-            rule(
-                (subclassof1 seq outV() seq B seq subclassof seq outV()) using { _ -> Unit },
-                (subclassof1 seq outV() seq subclassof seq outV()) using { _ -> Unit },
-            )
-        }
-        return ((B or eps()) seq subclassof seq outV()) using { _ -> Unit }
+    fun secondGrammar(): BaseParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Any> {
+        val subclassof1 = throughOutE { it.label == "subclassof-1" }
+        val subclassof = throughOutE { it.label == "subclassof" }
+
+        val S = LazyParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Any>()
+        S.p = (subclassof1 seq (S or eps()) seq subclassof)
+
+        return ((S or eps()) seq subclassof)
     }
 
     fun yagoGrammar(): BaseParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Unit> {

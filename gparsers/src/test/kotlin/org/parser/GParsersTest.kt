@@ -40,7 +40,7 @@ class GParsersTest {
         for(file in files) {
             val db = GParsers.createNeo4jDb(file).database(DEFAULT_DATABASE_NAME)
             val graph = GParsers.getGraph(file, db, GParsers::edgesToNeo4jGraph)
-            val cnt = GParsers.parse(graph, GParsers.firstGrammar2())
+            val cnt = GParsers.parse(graph, GParsers.firstGrammar())
            // println("File $file, first query: $cnt")
             val cnt2 = GParsers.parse(graph, GParsers.secondGrammar())
            // println("File $file, second query: $cnt2")
