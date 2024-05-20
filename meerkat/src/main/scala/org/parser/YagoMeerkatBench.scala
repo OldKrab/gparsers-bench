@@ -1,6 +1,7 @@
 package org.parser
 
 import org.meerkat.graph.neo4j.Neo4jInput
+import org.meerkat.graph.neo4j.Neo4jInput.Entity
 import org.meerkat.input.Input
 import org.meerkat.parsers.executeQuery
 import org.neo4j.graphdb.GraphDatabaseService
@@ -20,7 +21,7 @@ class YagoMeerkatBench {
   @Param(Array(""))
   var dbName = ""
 
-  var graph: Input[String, String] = _
+  var graph: Input[Entity, Entity] = _
    var neo4j:  GraphDatabaseService = _
 
   @Setup
