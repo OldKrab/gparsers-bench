@@ -44,6 +44,7 @@ open class YagoGParsersBench {
     fun yagoGrammar(): Int {
         val res = GParsers.yagoReversedGrammar().parseState(StartState(graph))
         val cnt = res.size
+        print(cnt)
         return cnt
     }
 
