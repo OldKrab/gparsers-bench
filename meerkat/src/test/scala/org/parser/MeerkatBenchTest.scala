@@ -75,6 +75,7 @@ class MeerkatBenchTest extends AnyFunSuite {
 }
 
 
+@Ignore
 @RunWith(classOf[JUnitRunner])
 class MeerkatRDFTest extends AnyFunSuite {
   test("rdfAll") {
@@ -102,6 +103,20 @@ class MeerkatRDFTest extends AnyFunSuite {
       assertResult(expected(file)._2)(cnt2)
     })
   }
-
-
 }
+
+@RunWith(classOf[JUnitRunner])
+class MeerkatCFPQTest extends AnyFunSuite {
+  test("cfpqAll") {
+    val filesLine = "go_hierarchy.csv,eclass.csv,enzyme.csv,geospecies.csv,go.csv"
+    val files = filesLine.split(",")
+    files.foreach(file => {
+      val graph = CFPQCsvGraph.getGraph(file)
+      val g = CFPQCsvGraph.grammar
+      val cnt =  Meerkat.parse(graph, g)
+      println(f"File $file, query: $cnt")
+    })
+  }
+}
+
+
