@@ -52,6 +52,31 @@ class GParsersTest {
 
     @Test
     @Disabled
+    fun cfpqAll(){
+        val expected = mapOf(
+            "go_hierarchy.csv" to 588976,
+            "eclass.csv" to 90994,
+            "enzyme.csv" to 396,
+            "geospecies.csv" to 85,
+            "go.csv" to 640316,
+        )
+
+        val filesLine = "go_hierarchy.csv,eclass.csv,enzyme.csv,geospecies.csv,go.csv"
+        val files = filesLine.split(",")
+        for(file in files) {
+            val neo4j = GParsers.createNeo4jDb(file)
+            val db = neo4j.database(DEFAULT_DATABASE_NAME)
+            val graph = CFPQCsvGraph.getGraph(file, db)
+            val grammar = CFPQCsvGraph.firstGrammar()
+            val cnt = GParsers.parse(graph, grammar)
+           // println("File $file, query: $cnt")
+            assertEquals(expected.getValue(file), cnt)
+        }
+    }
+
+
+    @Test
+    @Disabled
     fun yago(){
         var dbPath = "/home/old/diploma/sandbox/rlqdag/neo4j_4.4.33"
         var dbConfigPath = "/home/old/diploma/sandbox/rlqdag/neo4j_4.4.33/conf/neo4j.conf"

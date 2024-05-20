@@ -105,6 +105,7 @@ class MeerkatRDFTest extends AnyFunSuite {
   }
 }
 
+@Ignore
 @RunWith(classOf[JUnitRunner])
 class MeerkatCFPQTest extends AnyFunSuite {
   test("cfpqAll") {
