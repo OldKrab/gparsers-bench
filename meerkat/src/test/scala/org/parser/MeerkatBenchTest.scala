@@ -30,7 +30,7 @@ class MeerkatBenchTest extends AnyFunSuite {
   }
 
   test("testCFPQ") {
-    val file =  "go.csv"
+    val file =  "go_hierarchy.csv"
     val graph = CFPQCsvGraph.getGraph(file)
 
 //    val neo4j = Neo4jUtils.openNeo4jDb(

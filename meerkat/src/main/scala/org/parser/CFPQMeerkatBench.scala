@@ -18,9 +18,8 @@ class CFPQMeerkatBench {
   }
 
   @Benchmark
-  def firstGrammar(): Unit = {
-    val cnt = Meerkat.parse(graph, CFPQCsvGraph.grammar)
-    print(cnt)
+  def firstQuery(): Int = {
+    Meerkat.parse(graph, CFPQCsvGraph.grammar)
   }
 
 }

@@ -6,6 +6,8 @@ import org.parser.neo4j.DefaultNeo4jCombinators.inE
 import org.parser.neo4j.DefaultNeo4jCombinators.inV
 import org.parser.neo4j.DefaultNeo4jCombinators.outE
 import org.parser.neo4j.DefaultNeo4jCombinators.outV
+import org.parser.neo4j.DefaultNeo4jCombinators.throughInE
+import org.parser.neo4j.DefaultNeo4jCombinators.throughOutE
 import org.parser.neo4j.DefaultNeo4jGraph
 import org.parser.neo4j.DefaultNeo4jVertexState
 import org.parser.shared.loadCsvEdges
@@ -24,15 +26,15 @@ object CFPQCsvGraph {
     }
 
     fun firstGrammar(): BaseParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Any> {
-        val subclassof1 = inE { it.label == "subClassOf" }
-        val subclassof = outE { it.label == "subClassOf" }
-        val type1 = inE { it.label == "type" }
-        val type = outE { it.label == "type" }
+        val subclassof1 = throughInE { it.label == "subClassOf" }
+        val subclassof = throughOutE { it.label == "subClassOf" }
+        val type1 = throughInE { it.label == "type" }
+        val type = throughOutE { it.label == "type" }
         val S = LazyParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Any>()
-        S.p =  rule(
-                (subclassof1 seq inV() seq (S or eps()) seq subclassof seq outV()),
-                (type1 seq inV() seq (S or eps()) seq type seq outV())
-            )
+        S.p =
+                (subclassof1 seq (S or eps()) seq subclassof) or
+                (type1 seq (S or eps()) seq type)
+
         return S
     }
 }

@@ -32,9 +32,8 @@ open class CFPQGParsersBench {
     }
 
     @Benchmark
-    fun firstQuery() {
-        val cnt = GParsers.parse(graph, CFPQCsvGraph.firstGrammar())
-        println(cnt)
+    fun firstQuery(): Int {
+        return GParsers.parse(graph, CFPQCsvGraph.firstGrammar())
     }
 
 }

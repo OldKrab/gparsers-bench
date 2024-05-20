@@ -32,7 +32,6 @@ class GParsersTest {
     }
 
     @Test
-    @Disabled
     fun cfpq(){
         val file = "go.csv"
         val neo4j = GParsers.createNeo4jDb(file)

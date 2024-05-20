@@ -42,14 +42,14 @@ open class RDFGParsersBench {
     }
 
     @Benchmark
-    fun firstQuery() {
-        val cnt = GParsers.parse(graph, GParsers.firstGrammar())
+    fun firstQuery(): Int {
+        return GParsers.parse(graph, GParsers.firstGrammar())
     }
 
 
     @Benchmark
-    fun secondQuery() {
-        val cnt = GParsers.parse(graph, GParsers.secondGrammar())
+    fun secondQuery(): Int {
+        return GParsers.parse(graph, GParsers.secondGrammar())
     }
 }
 

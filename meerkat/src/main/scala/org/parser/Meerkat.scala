@@ -73,11 +73,11 @@ object Meerkat {
   }
 
   def getYagoGrammar() = {
-    syn((V((e: Entity) => e.getProperty("id") == "40324616") ~
+    syn(V((e: Entity) => e.getProperty("id") == "40324616") ~
       (inE((e: Entity) => e.label() == "P92580544")).+ ~
       inE((e: Entity) => e.label() == "P13305537").+ ~
       inE((e: Entity) => e.label() == "P59561600") ~
-      inE((e: Entity) => e.label() == "P74636308")) &&)
+      inE((e: Entity) => e.label() == "P74636308"))
   }
 
 
