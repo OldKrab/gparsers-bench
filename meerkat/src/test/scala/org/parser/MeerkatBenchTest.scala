@@ -22,6 +22,36 @@ class MeerkatBenchTest extends AnyFunSuite {
     val cnt = executeQuery(Meerkat.getYagoGrammar(), graph).size
     println(cnt)
   }
+
+
+
+
+  test("rdfAll") {
+    val expected = Map(
+      "atom-primitive.owl" -> (15454, 122),
+      "biomedical-mesure-primitive.owl" ->(15156, 2871),
+      "foaf.rdf" -> (4118, 10),
+      "generations.owl" -> (2164, 0),
+      "people_pets.rdf" -> (9472, 37),
+      "pizza.owl" -> (56195, 1262),
+      "skos.rdf" -> (810, 1),
+      "travel.owl"-> (2499, 63),
+      "univ-bench.owl" -> (2540, 81),
+      "wine.rdf" -> (66572, 133),
+    )
+    val filesLine = "atom-primitive.owl,biomedical-mesure-primitive.owl,foaf.rdf,generations.owl,people_pets.rdf,pizza.owl,skos.rdf,travel.owl,univ-bench.owl,wine.rdf"
+    val files = filesLine.split(",")
+    files.foreach(file => {
+      val graph = Neo4jUtils.getGraph(file, Meerkat.edgesToNeo4jGraph)
+      val cnt = Meerkat.parse(graph, Meerkat.getGrammar1())
+     // println(f"File $file, first query: $cnt")
+      val cnt2 = Meerkat.parse(graph, Meerkat.getGrammar2())
+     // println(f"File $file, second query: $cnt2")
+      assertResult(expected(file)._1)(cnt)
+      assertResult(expected(file)._2)(cnt2)
+    })
+
+  }
   test("test2") {
     val file =  "atom-primitive.owl"
     val graph = Neo4jUtils.getGraph(file, Meerkat.edgesToNeo4jGraph)
@@ -41,5 +71,37 @@ class MeerkatBenchTest extends AnyFunSuite {
     val cnt =  Meerkat.parse(graph, g)
     println(cnt)
   }
+
+}
+
+
+@RunWith(classOf[JUnitRunner])
+class MeerkatRDFTest extends AnyFunSuite {
+  test("rdfAll") {
+    val expected = Map(
+      "atom-primitive.owl" -> (15454, 122),
+      "biomedical-mesure-primitive.owl" ->(15156, 2871),
+      "foaf.rdf" -> (4118, 10),
+      "generations.owl" -> (2164, 0),
+      "people_pets.rdf" -> (9472, 37),
+      "pizza.owl" -> (56195, 1262),
+      "skos.rdf" -> (810, 1),
+      "travel.owl"-> (2499, 63),
+      "univ-bench.owl" -> (2540, 81),
+      "wine.rdf" -> (66572, 133),
+    )
+    val filesLine = "atom-primitive.owl,biomedical-mesure-primitive.owl,foaf.rdf,generations.owl,people_pets.rdf,pizza.owl,skos.rdf,travel.owl,univ-bench.owl,wine.rdf"
+    val files = filesLine.split(",")
+    files.foreach(file => {
+      val graph = Neo4jUtils.getGraph(file, Meerkat.edgesToNeo4jGraph)
+      val cnt = Meerkat.parse(graph, Meerkat.getGrammar1())
+      // println(f"File $file, first query: $cnt")
+      val cnt2 = Meerkat.parse(graph, Meerkat.getGrammar2())
+      // println(f"File $file, second query: $cnt2")
+      assertResult(expected(file)._1)(cnt)
+      assertResult(expected(file)._2)(cnt2)
+    })
+  }
+
 
 }

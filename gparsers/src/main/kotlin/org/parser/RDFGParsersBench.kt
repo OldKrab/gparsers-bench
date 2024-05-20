@@ -43,7 +43,7 @@ open class RDFGParsersBench {
 
     @Benchmark
     fun firstQuery(): Int {
-        return GParsers.parse(graph, GParsers.firstGrammar())
+        return GParsers.parse(graph, GParsers.firstGrammar2())
     }
 
 

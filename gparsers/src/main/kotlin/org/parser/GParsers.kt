@@ -12,6 +12,8 @@ import org.parser.neo4j.DefaultNeo4jCombinators.outE
 import org.parser.neo4j.DefaultNeo4jCombinators.inE
 import org.parser.neo4j.DefaultNeo4jCombinators.inV
 import org.parser.neo4j.DefaultNeo4jCombinators.outV
+import org.parser.neo4j.DefaultNeo4jCombinators.throughInE
+import org.parser.neo4j.DefaultNeo4jCombinators.throughOutE
 import org.parser.neo4j.DefaultNeo4jCombinators.v
 import org.parser.shared.Edge
 import java.net.URI
@@ -78,6 +80,18 @@ object GParsers {
                 (subclassof1 seq outV() seq (S or eps()) seq subclassof seq outV()),
                 (type1 seq outV() seq (S or eps()) seq type seq outV()),
             )
+
+        return S
+    }
+    fun firstGrammar2(): BaseParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Any> {
+        val subclassof1 = throughInE { it.label == "subClassOf" }
+        val subclassof = throughOutE { it.label == "subClassOf" }
+        val type1 = throughInE { it.label == "type" }
+        val type = throughOutE { it.label == "type" }
+        val S = LazyParser<DefaultNeo4jVertexState, DefaultNeo4jVertexState, Any>()
+        S.p =
+            (subclassof1 seq (S or eps()) seq subclassof) or
+                    (type1 seq (S or eps()) seq type)
 
         return S
     }
